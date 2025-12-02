@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมคำนวณทั้ง 3 โจทย์</title>
+    <style>
+        /* ========================================
+           CSS STYLING
+           ======================================== */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        h2 {
+            color: #764ba2;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-label {
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .info-box ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎫 โปรแกรมคำนวณทั้ง 3 โจทย์</h1>
+        
+        <!-- ========================================
+             โปรแกรมที่ 1: คำนวณค่าบัตรผ่านประตูพิพิธภัณฑ์
+             ======================================== -->
+        <div class="calculator-card">
+            <h2>1️⃣ คำนวณค่าบัตรผ่านประตูพิพิธภัณฑ์</h2>
+            
+            <div class="input-group">
+                <label for="height">ส่วนสูงของผู้เข้าชม (เซนติเมตร):</label>
+                <input type="number" id="height" placeholder="กรอกส่วนสูง เช่น 135" min="0" step="0.1">
+            </div>
+
+            <button onclick="calculateTicket()">🎟️ คำนวณค่าบัตร</button>
+
+            <div id="ticketResult" class="result">
+                <div class="result-label">ค่าบัตรผ่านประตู:</div>
+                <div class="result-value" id="ticketPrice"></div>
+            </div>
+
+            <div class="info-box">
+                <strong>📋 เงื่อนไข:</strong>
+                <ul>
+                    <li>ส่วนสูง < 80 ซม. → <strong>เข้าฟรี</strong></li>
+                    <li>ส่วนสูง 80-130 ซม. → ค่าบัตร <strong>50 บาท</strong></li>
+                    <li>ส่วนสูง > 130 ซม. → ค่าบัตร <strong>100 บาท</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ========================================
+             โปรแกรมที่ 2: คำนวณเงินสำรองเลี้ยงชีพ
+             ======================================== -->
+        <div class="calculator-card">
+            <h2>2️⃣ คำนวณเงินสำรองเลี้ยงชีพ (Provident Fund)</h2>
+            
+            <div class="input-group">
+                <label for="salary">เงินเดือน (บาท):</label>
+                <input type="number" id="salary" placeholder="กรอกเงินเดือน เช่น 15000" min="0" step="0.01">
+            </div>
+
+            <div class="input-group">
+                <label for="commission">ค่าคอมมิชชัน (บาท):</label>
+                <input type="number" id="commission" placeholder="กรอกค่าคอมมิชชัน เช่น 5000" min="0" step="0.01">
+            </div>
+
+            <button onclick="calculateProvidentFund()">💰 คำนวณเงินสำรองเลี้ยงชีพ</button>
+
+            <div id="providentResult" class="result">
+                <div class="result-label">รายรับทั้งหมด:</div>
+                <div class="result-value" id="totalIncome" style="font-size: 1.3em; margin-bottom: 10px;"></div>
+                
+                <div class="result-label">เงินสำรองเลี้ยงชีพที่ต้องหัก:</div>
+                <div class="result-value" id="providentAmount"></div>
+            </div>
+
+            <div class="info-box">
+                <strong>📋 เงื่อนไข (คิดจากเงินเดือนอย่างเดียว):</strong>
+                <ul>
+                    <li>เงินเดือน ≤ 10,000 บาท → <strong>ไม่หัก</strong></li>
+                    <li>เงินเดือน 10,001 - 20,000 บาท → หัก <strong>2%</strong></li>
+                    <li>เงินเดือน 20,001 - 49,999 บาท → หัก <strong>5%</strong></li>
+                    <li>เงินเดือน ≥ 50,000 บาท → หัก <strong>20%</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ========================================
+             โปรแกรมที่ 3: แสดงเดือน
+             ======================================== -->
+        <div class="calculator-card">
+            <h2>3️⃣ แสดงเดือน</h2>
+
+            <div class="input-group">
+                <label for="monthNumber">เลือกหมายเลขเดือน (1-12):</label>
+                <input type="number" id="monthNumber" placeholder="กรอกเลข 1-12" min="1" max="12" step="1">
+            </div>
+
+            <button onclick="showMonth()">📅 แสดงเดือน</button>
+
+            <div id="monthResult" class="result">
+                <div class="result-label">Month =</div>
+                <div class="result-value" id="monthName"></div>
+            </div>
+
+            <div class="info-box">
+                <strong>📋 รายการเดือน:</strong>
+                <ul>
+                    <li>1 = January (มกราคม)</li>
+                    <li>2 = February (กุมภาพันธ์)</li>
+                    <li>3 = March (มีนาคม)</li>
+                    <li>4 = April (เมษายน)</li>
+                    <li>5 = May (พฤษภาคม)</li>
+                    <li>6 = June (มิถุนายน)</li>
+                    <li>7 = July (กรกฎาคม)</li>
+                    <li>8 = August (สิงหาคม)</li>
+                    <li>9 = September (กันยายน)</li>
+                    <li>10 = October (ตุลาคม)</li>
+                    <li>11 = November (พฤศจิกายน)</li>
+                    <li>12 = December (ธันวาคม)</li>
+                    <li>เลขอื่น ๆ = Wrong Month</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ========================================
+           JAVASCRIPT CODE
+           ======================================== */
+
+        // ========================================
+        // โปรแกรมที่ 1: คำนวณค่าบัตรพิพิธภัณฑ์
+        // ========================================
+        function calculateTicket() {
+            // รับค่าส่วนสูงจาก input
+            const height = parseFloat(document.getElementById('height').value);
+            const resultDiv = document.getElementById('ticketResult');
+            const priceDiv = document.getElementById('ticketPrice');
+
+            // ตรวจสอบข้อมูลที่กรอก
+            if (isNaN(height) || height <= 0) {
+                alert('⚠️ กรุณากรอกส่วนสูงที่ถูกต้อง');
+                resultDiv.classList.remove('show');
+                return;
+            }
+
+            // คำนวณค่าบัตรตามเงื่อนไข
+            let ticketPrice;
+            if (height < 80) {
+                ticketPrice = 0;   // ส่วนสูง < 80 ซม. เข้าฟรี
+            } else if (height <= 130) {
+                ticketPrice = 50;  // ส่วนสูง 80-130 ซม.
+            } else {
+                ticketPrice = 100; // ส่วนสูง > 130 ซม.
+            }
+
+            // แสดงผลลัพธ์
+            if (ticketPrice === 0) {
+                priceDiv.textContent = 'เข้าฟรี!';
+            } else {
+                priceDiv.textContent = ticketPrice.toLocaleString('th-TH') + ' บาท';
+            }
+            resultDiv.classList.add('show');
+        }
+
+        // ========================================
+        // โปรแกรมที่ 2: คำนวณเงินสำรองเลี้ยงชีพ
+        // ========================================
+        function calculateProvidentFund() {
+            // รับค่าเงินเดือนและคอมมิชชันจาก input
+            const salary = parseFloat(document.getElementById('salary').value);
+            const commission = parseFloat(document.getElementById('commission').value);
+            const resultDiv = document.getElementById('providentResult');
+            const incomeDiv = document.getElementById('totalIncome');
+            const providentDiv = document.getElementById('providentAmount');
+
+            // ตรวจสอบข้อมูลที่กรอก
+            if (isNaN(salary) || salary < 0 || isNaN(commission) || commission < 0) {
+                alert('⚠️ กรุณากรอกข้อมูลที่ถูกต้อง');
+                resultDiv.classList.remove('show');
+                return;
+            }
+
+            // คำนวณรายรับทั้งหมด
+            const totalIncome = salary + commission;
+            let providentFund;
+
+            // คำนวณเงินสำรองเลี้ยงชีพตามเงื่อนไข (คิดจากเงินเดือนอย่างเดียว)
+            if (salary <= 10000) {
+                providentFund = 0; // เงินเดือน ≤ 10,000 บาท ไม่หัก
+            } else if (salary <= 20000) {
+                providentFund = salary * 0.02; // เงินเดือน 10,001-20,000 บาท หัก 2%
+            } else if (salary < 50000) {
+                providentFund = salary * 0.05; // เงินเดือน 20,001-49,999 บาท หัก 5%
+            } else {
+                providentFund = salary * 0.20; // เงินเดือน ≥ 50,000 บาท หัก 20%
+            }
+
+            // แสดงผลลัพธ์
+            incomeDiv.textContent = totalIncome.toLocaleString('th-TH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' บาท';
+
+            providentDiv.textContent = providentFund.toLocaleString('th-TH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' บาท';
+
+            resultDiv.classList.add('show');
+        }
+
+        // ========================================
+        // โปรแกรมที่ 3: แสดงเดือน
+        // ========================================
+        function showMonth() {
+            // รับค่าหมายเลขเดือนจาก input
+            const monthNumber = parseInt(document.getElementById('monthNumber').value);
+            const resultDiv = document.getElementById('monthResult');
+            const monthNameDiv = document.getElementById('monthName');
+
+            // ตรวจสอบข้อมูลที่กรอก
+            if (isNaN(monthNumber)) {
+                alert('⚠️ กรุณากรอกตัวเลข');
+                resultDiv.classList.remove('show');
+                return;
+            }
+
+            // ใช้ switch-case เพื่อหาชื่อเดือน
+            let monthName;
+            switch(monthNumber) {
+                case 1:
+                    monthName = 'January';
+                    break;
+                case 2:
+                    monthName = 'February';
+                    break;
+                case 3:
+                    monthName = 'March';
+                    break;
+                case 4:
+                    monthName = 'April';
+                    break;
+                case 5:
+                    monthName = 'May';
+                    break;
+                case 6:
+                    monthName = 'June';
+                    break;
+                case 7:
+                    monthName = 'July';
+                    break;
+                case 8:
+                    monthName = 'August';
+                    break;
+                case 9:
+                    monthName = 'September';
+                    break;
+                case 10:
+                    monthName = 'October';
+                    break;
+                case 11:
+                    monthName = 'November';
+                    break;
+                case 12:
+                    monthName = 'December';
+                    break;
+                default:
+                    monthName = 'Wrong Month'; // กรณีกรอกเลขอื่น ๆ
+            }
+
+            // แสดงผลลัพธ์
+            monthNameDiv.textContent = monthName;
+            resultDiv.classList.add('show');
+        }
+
+        // ========================================
+        // เพิ่มฟีเจอร์กด Enter เพื่อคำนวณ
+        // ========================================
+        document.getElementById('height').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateTicket();
+        });
+
+        document.getElementById('commission').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateProvidentFund();
+        });
+
+        document.getElementById('monthNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') showMonth();
+        });
+    </script>
+</body>
+</html>
